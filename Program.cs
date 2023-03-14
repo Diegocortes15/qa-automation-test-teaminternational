@@ -6,13 +6,12 @@ namespace qa_automation_test_teaminternational
   {
     static void Main(string[] args)
     {
-      double[,] triangleVertices = new double[,] { { 0, 0 }, { 2, 3.4641016151378 }, { 4, 0 } };
+      double[,] triangleVertices = new double[,] { { 0, 0 }, { 0, 4 }, { 4, 0 } };
+      //double[,] triangleVertices = new double[,] { { 0, 0 }, { 3, 4 }, { 3, 0 } };
+      //double[,] triangleVertices = new double[,] { { 0, 0 }, { 2, 3.4641016151378 }, { 4, 0 } };
+      //double[,] triangleVertices = new double[,] { { 1, 1 }, { 2, 2 }, { 3, 3 } };
       Triangle triangle = new Triangle(triangleVertices);
-      Console.WriteLine("isTriangle: ....." + triangle.isTriangle());
-      Console.WriteLine("isEquilateral: .." + triangle.isEquilateral());
-      Console.WriteLine("isIsosceles: ...." + triangle.isIsosceles());
-      Console.WriteLine("isRight: ........" + triangle.isRight());
-      Console.WriteLine("Perimeter: ........" + triangle.perimeter);
+      triangle.output();
     }
   }
 }

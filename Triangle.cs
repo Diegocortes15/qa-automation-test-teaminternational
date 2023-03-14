@@ -23,18 +23,14 @@ namespace qa_automation_test_teaminternational
     {
       double dx = Math.Abs(x1 - x2);
       double dy = Math.Abs(y1 - y2);
-      return Math.Round(Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2)), 1);
+      return Math.Round(Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2)), 2);
     }
 
     private void calculateSides()
     {
-
       this.sides[0] = calculateSide(vertices[0, 0], vertices[0, 1], vertices[1, 0], vertices[1, 1]);
       this.sides[1] = calculateSide(vertices[1, 0], vertices[1, 1], vertices[2, 0], vertices[2, 1]);
       this.sides[2] = calculateSide(vertices[2, 0], vertices[2, 1], vertices[0, 0], vertices[0, 1]);
-      Console.WriteLine("Side 1: ........" + this.sides[0]);
-      Console.WriteLine("Side 2: ........" + this.sides[1]);
-      Console.WriteLine("Side 3: ........" + this.sides[2]);
     }
 
     public bool isTriangle()
@@ -51,7 +47,9 @@ namespace qa_automation_test_teaminternational
 
     private double calculateAngle(double aSide, double bSide, double cSide)
     {
-      return Math.Round((Math.Acos((Math.Pow(bSide, 2) + Math.Pow(cSide, 2) - Math.Pow(aSide, 2)) / (2 * bSide * cSide))) * 180 / Math.PI, 1);
+      double cos = (bSide * bSide + cSide * cSide - aSide * aSide) / (2 * bSide * cSide);
+      double angle = Math.Acos(cos) * 180 / Math.PI;
+      return Math.Round(angle);
     }
 
     private void calculateAngles()
@@ -61,9 +59,8 @@ namespace qa_automation_test_teaminternational
       this.angles[2] = calculateAngle(this.sides[2], this.sides[0], this.sides[1]);
     }
 
-    public bool isEquilateral()
+    private bool isEquilateral()
     {
-      if (!isTriangle()) return false;
       if (this.sides[0] == this.sides[1] && this.sides[1] == this.sides[2])
       {
         return true;
@@ -71,9 +68,9 @@ namespace qa_automation_test_teaminternational
       return false;
     }
 
-    public bool isIsosceles()
+    private bool isIsosceles()
     {
-      if (isTriangle() && isEquilateral()) return false;
+      if (isEquilateral()) return false;
       else if (this.sides[0] == this.sides[1] || this.sides[1] == this.sides[2] || this.sides[2] == this.sides[0])
       {
         return true;
@@ -81,12 +78,8 @@ namespace qa_automation_test_teaminternational
       return false;
     }
 
-    public bool isRight()
+    private bool isRight()
     {
-      if (!isTriangle()) return false;
-      Console.WriteLine("Angle 1: ........" + this.angles[0]);
-      Console.WriteLine("Angle 2: ........" + this.angles[1]);
-      Console.WriteLine("Angle 3: ........" + this.angles[2]);
       if (this.angles.Any(angle => angle == 90))
       {
         return true;
@@ -94,24 +87,63 @@ namespace qa_automation_test_teaminternational
       return false;
     }
 
-    public void calculatePerimeter()
+    private void calculatePerimeter()
     {
       var triangleSides = (aSide: this.sides[0], bSide: this.sides[1], cSide: this.sides[2]);
       (double aSide, double bSide, double cSide) = triangleSides;
       this.perimeter = aSide + bSide + cSide;
     }
 
-    public void calculateEvenNumbersFromPerimeter()
+    private void calculateEvenNumbersFromPerimeter()
     {
       double perimeter = this.perimeter;
       for (int i = 0; i <= perimeter; i += 2)
       {
         this.evenNumbersFromPerimeter.Add(i);
       }
+    }
+
+    public string printSides()
+    {
+      if (!isTriangle()) return "printSides: The triangle is invalid";
+      return $"Length of AB is {this.sides[0]}\nLength of BC is {this.sides[1]}\nLength of AB is {this.sides[0]}";
+    }
+
+    public string printType()
+    {
+      if (!isTriangle()) return "printType: The triangle is invalid";
+      string isTriangleEquilateral = this.isEquilateral() ? "Triangle is 'Equilateral'" : "Triangle is NOT 'Equilateral'";
+      string isTriangleIsosceles = this.isIsosceles() ? "Triangle is 'Isosceles'" : "Triangle is NOT 'Isosceles'";
+      string isTriangleRight = this.isRight() ? "Triangle is 'Right'" : "Triangle is NOT 'Right'";
+      return $"{isTriangleEquilateral}\n{isTriangleIsosceles}\n{isTriangleRight}";
+    }
+
+    public string printPerimeter()
+    {
+      if (!isTriangle()) return "printPerimeter: The triangle is invalid";
+      return $"Perimeter: {this.perimeter}";
+    }
+
+    public string printEvenNumbersToPerimeter()
+    {
+      if (!isTriangle()) return "printEvenNumberToPerimeter: The triangle is invalid";
+      string outputEvenNumbersToPerimeter = "Parity numbers in range from 0 to triangle perimeter:\n";
       foreach (var item in this.evenNumbersFromPerimeter)
       {
-        Console.WriteLine(item);
+        outputEvenNumbersToPerimeter += $"{item}\n";
       }
+      return outputEvenNumbersToPerimeter;
+    }
+
+    public void output()
+    {
+      if (!isTriangle())
+      {
+        Console.WriteLine("output: The triangle is invalid");
+        return;
+      };
+      string output = $"{this.printSides()}\n\n{this.printType()}\n\n{this.printPerimeter()}\n\n{this.printEvenNumbersToPerimeter()}";
+      Console.WriteLine(output);
     }
   }
 }
