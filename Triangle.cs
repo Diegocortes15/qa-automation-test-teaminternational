@@ -5,8 +5,8 @@ namespace qa_automation_test_teaminternational
     private double[] sides = new double[3];
     private double[,] vertices;
     private double[] angles = new double[3];
-    public double perimeter;
-    List<double> evenNumbersFromPerimeter = new List<double>();
+    private double perimeter;
+    private List<double> evenNumbersFromPerimeter = new List<double>();
     public Triangle(double[,] vertices)
     {
       this.vertices = vertices;
