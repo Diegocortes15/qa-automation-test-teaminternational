@@ -14,6 +14,7 @@ namespace qa_automation_test_teaminternational
       this.calculateSides();
       if (isTriangle())
       {
+        this.calculateAngles();
         this.calculatePerimeter();
         this.calculateEvenNumbersFromPerimeter();
         this.output();
