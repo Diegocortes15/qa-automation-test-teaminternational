@@ -3,8 +3,7 @@ namespace qa_automation_test_teaminternational
   class Triangle
   {
     private double[] sides = new double[3];
-    private double[,] vertices;
-    private double[] angles = new double[3];
+    private double[,] vertices = new double[3, 2];
     private double perimeter;
     private List<double> evenNumbersFromPerimeter = new List<double>();
     public Triangle(double[,] vertices)
@@ -13,11 +12,18 @@ namespace qa_automation_test_teaminternational
       this.calculateSides();
       if (isTriangle())
       {
-        this.calculateAngles();
         this.calculatePerimeter();
         this.calculateEvenNumbersFromPerimeter();
+        this.output();
+      }
+      else
+      {
+        this.output();
       }
     }
+
+    public Triangle()
+    { }
 
     private double calculateSide(double x1, double y1, double x2, double y2)
     {
@@ -35,6 +41,7 @@ namespace qa_automation_test_teaminternational
 
     public bool isTriangle()
     {
+      this.calculateSides();
       var triangleSides = (aSide: this.sides[0], bSide: this.sides[1], cSide: this.sides[2]);
       (double aSide, double bSide, double cSide) = triangleSides;
 
@@ -52,13 +59,6 @@ namespace qa_automation_test_teaminternational
       return Math.Round(angle);
     }
 
-    private void calculateAngles()
-    {
-      this.angles[0] = calculateAngle(this.sides[0], this.sides[1], this.sides[2]);
-      this.angles[1] = calculateAngle(this.sides[1], this.sides[0], this.sides[2]);
-      this.angles[2] = calculateAngle(this.sides[2], this.sides[0], this.sides[1]);
-    }
-
     private bool isEquilateral()
     {
       if (this.sides[0] == this.sides[1] && this.sides[1] == this.sides[2])
@@ -71,16 +71,27 @@ namespace qa_automation_test_teaminternational
     private bool isIsosceles()
     {
       if (isEquilateral()) return false;
-      else if (this.sides[0] == this.sides[1] || this.sides[1] == this.sides[2] || this.sides[2] == this.sides[0])
+      else
       {
-        return true;
+        var triangleSides = (aSide: this.sides[0], bSide: this.sides[1], cSide: this.sides[2]);
+        (double aSide, double bSide, double cSide) = triangleSides;
+        if (aSide == bSide || bSide == cSide || cSide == aSide)
+        {
+          return true;
+        }
+        return false;
       }
-      return false;
     }
 
     private bool isRight()
     {
-      if (this.angles.Any(angle => angle == 90))
+      if (isEquilateral()) return false;
+      double maxSide = sides.Max();
+      double maxSideSquared = Math.Pow(maxSide, 2);
+      double[] remainingSides = sides.Where(n => n != maxSide).ToArray();
+      double hSquared = Math.Pow(remainingSides[0], 2) + Math.Pow(remainingSides[1], 2);
+
+      if (Math.Abs(maxSideSquared - hSquared) <= 0.09)
       {
         return true;
       }
@@ -96,6 +107,7 @@ namespace qa_automation_test_teaminternational
 
     private void calculateEvenNumbersFromPerimeter()
     {
+      this.evenNumbersFromPerimeter.Clear();
       double perimeter = this.perimeter;
       for (int i = 0; i <= perimeter; i += 2)
       {
@@ -106,7 +118,7 @@ namespace qa_automation_test_teaminternational
     public string printSides()
     {
       if (!isTriangle()) return "printSides: The triangle is invalid";
-      return $"Length of AB is {this.sides[0]}\nLength of BC is {this.sides[1]}\nLength of AB is {this.sides[0]}";
+      return $"Length of AB is {this.sides[0]}\nLength of BC is {this.sides[1]}\nLength of CA is {this.sides[2]}";
     }
 
     public string printType()
@@ -121,12 +133,14 @@ namespace qa_automation_test_teaminternational
     public string printPerimeter()
     {
       if (!isTriangle()) return "printPerimeter: The triangle is invalid";
+      this.calculatePerimeter();
       return $"Perimeter: {this.perimeter}";
     }
 
     public string printEvenNumbersToPerimeter()
     {
       if (!isTriangle()) return "printEvenNumberToPerimeter: The triangle is invalid";
+      this.calculateEvenNumbersFromPerimeter();
       string outputEvenNumbersToPerimeter = "Parity numbers in range from 0 to triangle perimeter:\n";
       foreach (var item in this.evenNumbersFromPerimeter)
       {
@@ -135,8 +149,14 @@ namespace qa_automation_test_teaminternational
       return outputEvenNumbersToPerimeter;
     }
 
+    public string printCoordinates()
+    {
+      return $"Coordinates:\nA = ({this.vertices[0, 0]}, {this.vertices[0, 1]})\nB = ({this.vertices[1, 0]}, {this.vertices[1, 1]})\nC = ({this.vertices[2, 0]}, {this.vertices[2, 1]})";
+    }
+
     public void output()
     {
+      Console.WriteLine($"{this.printCoordinates()}\n");
       if (!isTriangle())
       {
         Console.WriteLine("output: The triangle is invalid");
@@ -144,6 +164,31 @@ namespace qa_automation_test_teaminternational
       };
       string output = $"{this.printSides()}\n\n{this.printType()}\n\n{this.printPerimeter()}\n\n{this.printEvenNumbersToPerimeter()}";
       Console.WriteLine(output);
+    }
+
+    public void setXA(double x)
+    {
+      this.vertices[0, 0] = x;
+    }
+    public void setYA(double y)
+    {
+      this.vertices[0, 1] = y;
+    }
+    public void setXB(double x)
+    {
+      this.vertices[1, 0] = x;
+    }
+    public void setYB(double y)
+    {
+      this.vertices[1, 1] = y;
+    }
+    public void setXC(double x)
+    {
+      this.vertices[2, 0] = x;
+    }
+    public void setYC(double y)
+    {
+      this.vertices[2, 1] = y;
     }
   }
 }
