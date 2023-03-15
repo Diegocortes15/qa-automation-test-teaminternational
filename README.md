@@ -93,3 +93,13 @@ A(0, 0) B(2, 3.46) C(4, 0)
 ![image](https://user-images.githubusercontent.com/60171460/225257700-583924c6-c82d-4b91-a0c2-0d310b97e87b.png)
 
 ![image](https://user-images.githubusercontent.com/60171460/225257941-9415fd2b-d75c-419c-8c58-98b154b794da.png)
+
+### Isosceles Triangle
+
+A(0, 0) B(1.5, 4) C(3, 0)
+
+![image](https://user-images.githubusercontent.com/60171460/225274852-31956619-826b-45c3-bbf0-cc2485b5f48d.png)
+
+![image](https://user-images.githubusercontent.com/60171460/225274988-cc6dd6fb-3889-4b67-a4e9-eae97e485677.png)
+
+
