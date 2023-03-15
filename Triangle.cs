@@ -3,8 +3,10 @@ namespace qa_automation_test_teaminternational
   class Triangle
   {
     private double[] sides = new double[3];
+    private double[] angles = new double[3];
     private double[,] vertices = new double[3, 2];
     private double perimeter;
+    private double delta = 0.55;
     private List<double> evenNumbersFromPerimeter = new List<double>();
     public Triangle(double[,] vertices)
     {
@@ -56,7 +58,14 @@ namespace qa_automation_test_teaminternational
     {
       double cos = (bSide * bSide + cSide * cSide - aSide * aSide) / (2 * bSide * cSide);
       double angle = Math.Acos(cos) * 180 / Math.PI;
-      return Math.Round(angle);
+      return Math.Round(angle, 2);
+    }
+
+    private void calculateAngles()
+    {
+      this.angles[0] = calculateAngle(this.sides[0], this.sides[1], this.sides[2]);
+      this.angles[1] = calculateAngle(this.sides[1], this.sides[0], this.sides[2]);
+      this.angles[2] = calculateAngle(this.sides[2], this.sides[0], this.sides[1]);
     }
 
     private bool isEquilateral()
@@ -85,13 +94,8 @@ namespace qa_automation_test_teaminternational
 
     private bool isRight()
     {
-      if (isEquilateral()) return false;
-      double maxSide = sides.Max();
-      double maxSideSquared = Math.Pow(maxSide, 2);
-      double[] remainingSides = sides.Where(n => n != maxSide).ToArray();
-      double hSquared = Math.Pow(remainingSides[0], 2) + Math.Pow(remainingSides[1], 2);
-
-      if (Math.Abs(maxSideSquared - hSquared) <= 0.09)
+      this.calculateAngles();
+      if (this.angles.Any(angle => (angle <= 90 + this.delta && angle >= 90 - this.delta)))
       {
         return true;
       }
